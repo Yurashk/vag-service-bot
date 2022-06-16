@@ -1,6 +1,8 @@
 const TelegramApi = require('node-telegram-bot-api')
 const express = require("express")
 const mongoose = require("mongoose")
+const https = require('https')
+const fs = require('fs')
 const corsMiddleware = require("./middleware/cors.middleware")
 const appRouter = require("./routers/appRouter")
 const {adminOptions, userOptions, carsAddOptions, againOptions} = require('./options')
@@ -13,6 +15,15 @@ const app = express()
 app.use(corsMiddleware)
 app.use(express.json())
 app.use("/app", appRouter)
+
+const sslServer = https.createServer({
+
+    // key:fs.readFileSync(path.join(__dirname,'cert','key.pem')),
+    // cert:fs.readFileSync(path.join(__dirname,'cert','cert.pem'))
+    key: fs.readFileSync('/etc/letsencrypt/live/vag-cars.in.ua/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/vag-cars.in.ua/cert.pem'),
+    ca: fs.readFileSync('/etc/letsencrypt/live/vag-cars.in.ua/chain.pem'),
+}, app)
 
 const bot = new TelegramApi(process.env.BOT_TOKEN, {polling: true})
 let currentUser = '';
@@ -50,7 +61,8 @@ const start = async () => {
 
     try {
         await mongoose.connect(`mongodb+srv://yurii:${process.env.DB_PASSWORD}@cluster0.yjfwv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`)
-        app.listen(PORT, () => console.log(`server started at ${PORT} port`))
+        sslServer.listen(5000, () => console.log(`server started at ${PORT} port`))
+        // app.listen(PORT, () => console.log(`server started at ${PORT} port`))
     } catch (e) {
         console.log('Подключение к бд сломалось', e)
     }
