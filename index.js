@@ -61,7 +61,7 @@ const start = async () => {
 
     try {
         await mongoose.connect(`mongodb+srv://yurii:${process.env.DB_PASSWORD}@cluster0.yjfwv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`)
-        sslServer.listen(5000, () => console.log(`server started at ${PORT} port`))
+        sslServer.listen(5001, () => console.log(`server started at ${PORT} port`))
         // app.listen(PORT, () => console.log(`server started at ${PORT} port`))
     } catch (e) {
         console.log('Подключение к бд сломалось', e)
