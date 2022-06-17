@@ -25,7 +25,19 @@ app.use("/app", appRouter)
 //     // ca: fs.readFileSync('/etc/letsencrypt/live/vag-cars.in.ua/chain.pem'),
 // }, app)
 
-const bot = new TelegramApi(process.env.BOT_TOKEN, {polling: true})
+const bot = new TelegramApi(process.env.BOT_TOKEN, {
+        polling: true, request: {
+            agentClass: Agent,
+            agentOptions: {
+                socksHost: process.env.PROXY_SOCKS5_HOST,
+                socksPort: parseInt(process.env.PROXY_SOCKS5_PORT),
+                // If authorization is needed:
+                // socksUsername: process.env.PROXY_SOCKS5_USERNAME,
+                // socksPassword: process.env.PROXY_SOCKS5_PASSWORD
+            }
+        }
+    }
+)
 let currentUser = '';
 
 const chats = {}
@@ -99,7 +111,7 @@ const start = async () => {
                     .then(res => {
                         // console.log(`statusCode: ${res.status}`)
                         return bot.sendMessage(chatId, `Власник: ${res.data.clientName}\nНомер телефона: ${res.data.clientPhone}\nРоботи по автомобілю: ${res.data.description}\nАвтомобіль: ${res.data.clientCar}`);
-                         // bot.sendMessage(chatId, `Данні по автомобілю знайдено!`);
+                        // bot.sendMessage(chatId, `Данні по автомобілю знайдено!`);
                     })
                     .catch(error => {
                         return bot.sendMessage(chatId, `На жаль вашого авто не знайдено /menu`);
