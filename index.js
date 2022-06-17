@@ -20,9 +20,9 @@ const sslServer = https.createServer({
 
     // key:fs.readFileSync(path.join(__dirname,'cert','key.pem')),
     // cert:fs.readFileSync(path.join(__dirname,'cert','cert.pem'))
-    key: fs.readFileSync('/etc/letsencrypt/live/vag-cars.in.ua/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/vag-cars.in.ua/cert.pem'),
-    ca: fs.readFileSync('/etc/letsencrypt/live/vag-cars.in.ua/chain.pem'),
+    key: fs.readFileSync('ssl/PRIVATE.key'),
+    cert: fs.readFileSync('ssl/PUBLIC.pem'),
+    // ca: fs.readFileSync('/etc/letsencrypt/live/vag-cars.in.ua/chain.pem'),
 }, app)
 
 const bot = new TelegramApi(process.env.BOT_TOKEN, {polling: true})
