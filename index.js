@@ -7,7 +7,7 @@ const corsMiddleware = require("./middleware/cors.middleware")
 const appRouter = require("./routers/appRouter")
 const {adminOptions, userOptions, carsAddOptions, againOptions} = require('./options')
 const axios = require('axios')
-const PORT = process.env.PORT || 5001
+const PORT = process.env.PORT || 8080
 require('dotenv').config()
 const app = express()
 
@@ -61,7 +61,7 @@ const start = async () => {
 
     try {
         await mongoose.connect(`mongodb+srv://yurii:${process.env.DB_PASSWORD}@cluster0.yjfwv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`)
-        sslServer.listen(5001, () => console.log(`server started at ${PORT} port`))
+        sslServer.listen(8080, () => console.log(`server started at ${PORT} port`))
         // app.listen(PORT, () => console.log(`server started at ${PORT} port`))
     } catch (e) {
         console.log('Подключение к бд сломалось', e)
